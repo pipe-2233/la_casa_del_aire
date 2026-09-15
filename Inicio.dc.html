@@ -26,6 +26,8 @@
   .js-anim [data-rv].in { opacity:1; transform:none; }
   .js-anim [data-rvx] { opacity:0; transform:translateX(-26px); transition:opacity .9s cubic-bezier(.16,.84,.26,1), transform .9s cubic-bezier(.16,.84,.26,1); }
   .js-anim [data-rvx].in { opacity:1; transform:none; }
+  .sticky-col { position:sticky; }
+  @media (max-width:760px) { .sticky-col { position:static; } }
 </style>
 <script src="boot-intro.js"></script>
 </helmet>
@@ -112,7 +114,7 @@
 
   <section id="servicios" style="position:relative;z-index:1;padding:clamp(70px,12vh,150px) clamp(16px,4vw,40px)">
     <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(30px,6vw,80px);align-items:start">
-      <div style="position:sticky;top:120px">
+      <div class="sticky-col" style="top:120px">
         <div data-rv style="font-size:11px;font-weight:600;letter-spacing:.2em;color:#5b6b83;margin-bottom:18px">QUÉ HACEMOS</div>
         <h2 data-rv style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(30px,4.6vw,52px);line-height:1.02;letter-spacing:-.04em;margin:0 0 20px;text-wrap:balance">Frío, agua caliente y gas legal. Un solo equipo.</h2>
         <p data-rv style="font-size:16px;line-height:1.6;color:#5b6b83;margin:0;max-width:34ch;text-wrap:pretty">Dos sedes: La Casa del Aire Acondicionado y La Casa del Gas. Vendemos, instalamos, mantenemos y reparamos — y certificamos lo que la ley exige.</p>
@@ -163,7 +165,9 @@
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:rgba(22,35,58,.1);border-radius:22px;overflow:hidden">
         <sc-for list="{{ marcas }}" as="m" hint-placeholder-count="4">
-          <div data-rv style="height:104px;display:grid;place-items:center;background:#e9edf2;font-family:'Sora',sans-serif;font-weight:600;font-size:16px;letter-spacing:.02em;color:#44546e">{{ m }}</div>
+          <div data-rv style="height:104px;display:grid;place-items:center;background:#e9edf2;padding:20px">
+            <img src="{{ m.img }}" alt="{{ m.nombre }}" style="max-width:100%;max-height:100%;object-fit:contain;filter:grayscale(1);opacity:.75;transition:filter .35s ease,opacity .35s ease" style-hover="filter:grayscale(0);opacity:1">
+          </div>
         </sc-for>
       </div>
     </div>
@@ -356,7 +360,12 @@ class Component extends DCLogic {
         { n: '04', title: 'Gas con certificación legal', body: 'Redes internas, prueba de hermeticidad y certificado para el operador.', href: 'Servicios.dc.html#gas' },
         { n: '05', title: 'Ferretería', body: 'Repuestos, tubería, accesorios y herramienta en las dos sedes.', href: 'Servicios.dc.html#ferreteria' }
       ],
-      marcas: ['BOSCH', 'OKA', 'LG', 'HACEB'],
+      marcas: [
+        { nombre: 'Bosch', img: 'assets/BOSH.png' },
+        { nombre: 'Oka', img: 'assets/OKA.png' },
+        { nombre: 'LG', img: 'assets/lg.webp' },
+        { nombre: 'Haceb', img: 'assets/HACEB.png' }
+      ],
       whatsapp: this.props.whatsapp ?? '573000000000',
       waLink: 'https://wa.me/' + ((this.props.whatsapp ?? '573000000000').replace(/[^0-9]/g, '') || '573000000000')
     };
