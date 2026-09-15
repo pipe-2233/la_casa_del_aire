@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:#e9edf2; font-family:'Outfit',system-ui,sans-serif; color:#16233a; overflow-x:hidden; }
+  a { color:#16233a; text-decoration:none; }
+  a:hover { color:#1553a8; }
+  ::selection { background:#16233a; color:#fff; }
+  input[type=range] { accent-color:#1553a8; }
+  .js-anim [data-rv] { opacity:0; transform:translateY(26px); transition:opacity .9s cubic-bezier(.16,.84,.26,1), transform .9s cubic-bezier(.16,.84,.26,1); }
+  .js-anim [data-rv].in { opacity:1; transform:none; }
+</style>
+<script src="boot-intro.js"></script>
+</helmet>
+
+<div data-page style="position:relative;isolation:isolate">
+
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(110vw 70vh at 20% -14%, rgba(186,220,255,.5) 0%, rgba(233,237,242,0) 60%), radial-gradient(90vw 60vh at 90% 104%, rgba(255,222,190,.5) 0%, rgba(233,237,242,0) 58%)"></div>
+
+  <dc-import name="Nav" active="herramientas" whatsapp="{{ whatsapp }}" hint-size="100%,70px"></dc-import>
+
+  <section style="position:relative;z-index:1;padding:clamp(120px,18vh,180px) clamp(16px,4vw,40px) clamp(34px,5vh,56px)">
+    <div style="max-width:1180px;margin:0 auto">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.2em;color:#5b6b83;margin-bottom:18px">HERRAMIENTAS</div>
+      <h1 style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(34px,5.6vw,68px);line-height:.99;letter-spacing:-.045em;margin:0 0 22px;max-width:24ch;text-wrap:balance">Sabe qué necesitas antes de que llegue el técnico.</h1>
+      <p style="font-size:clamp(16px,1.8vw,19px);line-height:1.55;color:#44546e;margin:0;max-width:54ch;text-wrap:pretty">Mide la habitación con la cámara o a mano, calcula los BTU, resuelve el litraje del calentador y pregúntale lo que quieras al asesor.</p>
+    </div>
+  </section>
+
+  <section id="medir" style="position:relative;z-index:1;padding:clamp(20px,4vh,40px) clamp(16px,4vw,40px);scroll-margin-top:90px">
+    <div style="max-width:1180px;margin:0 auto">
+      <div data-rv style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin-bottom:24px">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.2em;color:#5b6b83;margin-bottom:14px">01 · MEDIR EL ESPACIO</div>
+          <h2 style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(26px,3.8vw,42px);line-height:1.04;letter-spacing:-.04em;margin:0">¿Cuántos BTU necesita tu habitación?</h2>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onClick="{{ tabManual }}" style="padding:12px 18px;border:0;border-radius:15px;font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;color:#16233a;background:#e9edf2;box-shadow:{{ shManual }}">A mano</button>
+          <button onClick="{{ tabCamara }}" style="padding:12px 18px;border:0;border-radius:15px;font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;color:#16233a;background:#e9edf2;box-shadow:{{ shCamara }}">Con cámara</button>
+        </div>
+      </div>
+
+      <sc-if value="{{ isCamara }}" hint-placeholder-val="{{ false }}">
+        <div data-rv style="margin-bottom:20px">
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+            <sc-for list="{{ camSteps }}" as="st" hint-placeholder-count="3">
+              <div style="flex:1;min-width:180px;padding:15px 17px;border-radius:18px;background:{{ st.bg }};border:1px solid {{ st.border }}">
+                <div style="font-size:10.5px;font-weight:600;letter-spacing:.14em;color:#5b6b83;margin-bottom:6px">PASO {{ st.n }}</div>
+                <div style="font-size:14px;font-weight:600;line-height:1.4;color:{{ st.ink }}">{{ st.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="position:relative;border-radius:26px;overflow:hidden;background:#101a2b;aspect-ratio:4/3;max-height:440px">
+            <video ref="{{ videoRef }}" playsinline muted autoplay style="width:100%;height:100%;object-fit:cover;display:block"></video>
+            <div onClick="{{ onCamTap }}" style="position:absolute;inset:0;cursor:crosshair">
+              <sc-for list="{{ camMarks }}" as="m" hint-placeholder-count="0">
+                <div style="position:absolute;left:{{ m.x }}%;top:{{ m.y }}%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;border:2px solid {{ m.color }};background:rgba(255,255,255,.14)">
+                  <span style="position:absolute;inset:0;margin:auto;width:4px;height:4px;border-radius:50%;background:{{ m.color }}"></span>
+                </div>
+              </sc-for>
+              <sc-if value="{{ camLine }}" hint-placeholder-val="{{ false }}">
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+                  <line x1="{{ camLine.x1 }}" y1="{{ camLine.y1 }}" x2="{{ camLine.x2 }}" y2="{{ camLine.y2 }}" stroke="{{ camLine.color }}" stroke-width="1" stroke-dasharray="3 2" vector-effect="non-scaling-stroke"></line>
+                </svg>
+              </sc-if>
+            </div>
+            <sc-if value="{{ camIdle }}" hint-placeholder-val="{{ true }}">
+              <div style="position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:26px;background:linear-gradient(180deg,rgba(16,26,43,.78),rgba(16,26,43,.94))">
+                <div>
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c9d7ea" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 14px;display:block"><path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h1.7a1 1 0 0 0 .83-.45l.94-1.4A1 1 0 0 1 9.8 3.7h4.4a1 1 0 0 1 .83.45l.94 1.4A1 1 0 0 0 16.8 6h1.7A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z"></path><circle cx="12" cy="12.4" r="3.4"></circle></svg>
+                  <div style="font-family:'Sora',sans-serif;font-weight:600;font-size:19px;color:#fff;margin-bottom:10px">Medición asistida por cámara</div>
+                  <p style="font-size:14px;line-height:1.55;color:#a9bad2;max-width:42ch;margin:0 auto 20px">Apunta a la pared, marca una referencia de altura conocida y toca los extremos del muro. Calculamos el resto.</p>
+                  <button onClick="{{ startCam }}" style="padding:15px 23px;border:0;border-radius:17px;font-family:inherit;font-weight:600;font-size:15px;color:#16233a;background:#e9edf2;cursor:pointer;box-shadow:0 12px 26px rgba(0,0,0,.35)">Activar cámara</button>
+                  <div style="font-size:12.5px;color:#8b9cb5;margin-top:14px">{{ camError }}</div>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px">
+            <div style="flex:1;min-width:230px;padding:15px 17px;border-radius:18px;background:rgba(255,255,255,.45);border:1px solid rgba(22,35,58,.09);font-size:14px;font-weight:500;color:#2b3c57;line-height:1.5">{{ camHint }}</div>
+            <sc-if value="{{ camNeedsRef }}" hint-placeholder-val="{{ false }}">
+              <label style="display:flex;align-items:center;gap:10px;padding:13px 17px;border-radius:17px;background:rgba(255,255,255,.45);border:1px solid rgba(22,35,58,.09);font-size:13.5px;font-weight:500">
+                Referencia
+                <select value="{{ camRef }}" onChange="{{ onRefChange }}" style="border:0;background:transparent;font-family:inherit;font-size:13.5px;font-weight:600;color:#1553a8;outline:none">
+                  <option value="2.05">Puerta 2,05 m</option>
+                  <option value="1.7">Persona 1,70 m</option>
+                  <option value="0.6">Baldosa 60 cm</option>
+                  <option value="0.33">Baldosa 33 cm</option>
+                </select>
+              </label>
+            </sc-if>
+            <button onClick="{{ resetCam }}" style="padding:13px 18px;border:0;border-radius:16px;font-family:inherit;font-weight:600;font-size:13.5px;color:#16233a;background:#e9edf2;box-shadow:6px 6px 14px #c7ced8,-6px -6px 14px #ffffff;cursor:pointer">Reiniciar</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <div data-rv style="display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:18px;align-items:stretch">
+        <div style="display:grid;gap:14px;align-content:start">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:12px">
+            <label style="display:block;padding:15px 17px;border-radius:18px;background:rgba(255,255,255,.45);border:1px solid rgba(22,35,58,.09)">
+              <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:#5b6b83;margin-bottom:7px">ANCHO (M)</span>
+              <input type="number" step="0.1" min="0" value="{{ ancho }}" onChange="{{ onAncho }}" onInput="{{ onAncho }}" style="width:100%;border:0;background:transparent;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;color:#16233a;outline:none;min-height:34px">
+            </label>
+            <label style="display:block;padding:15px 17px;border-radius:18px;background:rgba(255,255,255,.45);border:1px solid rgba(22,35,58,.09)">
+              <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:#5b6b83;margin-bottom:7px">LARGO (M)</span>
+              <input type="number" step="0.1" min="0" value="{{ largo }}" onChange="{{ onLargo }}" onInput="{{ onLargo }}" style="width:100%;border:0;background:transparent;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;color:#16233a;outline:none;min-height:34px">
+            </label>
+            <label style="display:block;padding:15px 17px;border-radius:18px;background:rgba(255,255,255,.45);border:1px solid rgba(22,35,58,.09)">
+              <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:#5b6b83;margin-bottom:7px">ALTO (M)</span>
+              <input type="number" step="0.1" min="0" value="{{ alto }}" onChange="{{ onAlto }}" onInput="{{ onAlto }}" style="width:100%;border:0;background:transparent;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;color:#16233a;outline:none;min-height:34px">
+            </label>
+          </div>
+
+          <div style="padding:18px;border-radius:20px;background:rgba(255,255,255,.45);border:1px solid rgba(22,35,58,.09)">
+            <div style="display:flex;justify-content:space-between;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:#5b6b83;margin-bottom:12px"><span>PERSONAS</span><span style="color:#1553a8">{{ personas }}</span></div>
+            <input type="range" min="1" max="10" step="1" value="{{ personas }}" onChange="{{ onPersonas }}" onInput="{{ onPersonas }}" style="width:100%">
+            <div style="display:flex;justify-content:space-between;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:#5b6b83;margin:18px 0 12px"><span>VENTANAS</span><span style="color:#1553a8">{{ ventanas }}</span></div>
+            <input type="range" min="0" max="6" step="1" value="{{ ventanas }}" onChange="{{ onVentanas }}" onInput="{{ onVentanas }}" style="width:100%">
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ solOptions }}" as="o" hint-placeholder-count="3">
+              <button onClick="{{ o.pick }}" style="flex:1;min-width:96px;padding:13px 12px;border:0;border-radius:16px;font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;color:#16233a;background:#e9edf2;box-shadow:{{ o.shadow }}">{{ o.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="position:relative;overflow:hidden;border-radius:28px;padding:clamp(24px,3.4vw,34px);background:linear-gradient(155deg,#16283f,#0c1929);display:flex;flex-direction:column">
+          <div style="font-size:10.5px;font-weight:600;letter-spacing:.16em;color:#8ba3c4;margin-bottom:16px">RECOMENDACIÓN</div>
+          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(34px,5vw,52px);line-height:1;letter-spacing:-.04em;color:#fff">{{ btuLabel }}</div>
+          <div style="font-size:14px;font-weight:500;color:#9fb6d4;margin:10px 0 22px">BTU/h · {{ areaLabel }} m² · {{ recEquipo }}</div>
+          <div style="display:grid;gap:11px;flex:1">
+            <sc-for list="{{ recLines }}" as="l" hint-placeholder-count="3">
+              <div style="display:flex;gap:11px;align-items:flex-start;font-size:14px;line-height:1.5;color:#d3dfee">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#7fa8dd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:3px"><path d="M3 8.5 6.2 11.7 13 4.9"></path></svg>
+                <span>{{ l }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <a href="{{ waQuote }}" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:24px;padding:16px;border-radius:18px;font-weight:600;font-size:15px;color:#16233a;background:#e9edf2" style-hover="background:#ffffff">Enviar esta medida por WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="calentador" style="position:relative;z-index:1;padding:clamp(50px,8vh,100px) clamp(16px,4vw,40px);scroll-margin-top:90px">
+    <div style="max-width:1180px;margin:0 auto">
+      <div data-rv style="margin-bottom:26px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.2em;color:#5b6b83;margin-bottom:14px">02 · CALENTADOR</div>
+        <h2 style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(26px,3.8vw,42px);line-height:1.04;letter-spacing:-.04em;margin:0;max-width:24ch;text-wrap:balance">Tres preguntas y sabemos el litraje</h2>
+      </div>
+
+      <div data-rv style="display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:18px;align-items:stretch">
+        <div style="display:grid;gap:20px;align-content:start;padding:clamp(20px,3vw,28px);border-radius:26px;background:rgba(255,255,255,.45);border:1px solid rgba(22,35,58,.09)">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#44546e;margin-bottom:10px">Baños con ducha</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <sc-for list="{{ banosOptions }}" as="o" hint-placeholder-count="4">
+                <button onClick="{{ o.pick }}" style="flex:1;min-width:58px;padding:13px 10px;border:0;border-radius:15px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;color:#16233a;background:#e9edf2;box-shadow:{{ o.shadow }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#44546e;margin-bottom:10px">Uso simultáneo (ducha y cocina a la vez)</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <sc-for list="{{ simulOptions }}" as="o" hint-placeholder-count="2">
+                <button onClick="{{ o.pick }}" style="flex:1;min-width:110px;padding:13px 10px;border:0;border-radius:15px;font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;color:#16233a;background:#e9edf2;box-shadow:{{ o.shadow }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#44546e;margin-bottom:10px">Dónde va instalado</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <sc-for list="{{ tiroOptions }}" as="o" hint-placeholder-count="2">
+                <button onClick="{{ o.pick }}" style="flex:1;min-width:130px;padding:13px 10px;border:0;border-radius:15px;font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;color:#16233a;background:#e9edf2;box-shadow:{{ o.shadow }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="position:relative;overflow:hidden;border-radius:28px;padding:clamp(24px,3.4vw,34px);background:linear-gradient(155deg,#a8400f,#7a2710);display:flex;flex-direction:column">
+          <div style="font-size:10.5px;font-weight:600;letter-spacing:.16em;color:#ffffff;margin-bottom:16px">TE RECOMENDAMOS</div>
+          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(30px,4.4vw,46px);line-height:1;letter-spacing:-.04em;color:#fff">{{ litrosLabel }}</div>
+          <div style="font-size:14.5px;font-weight:500;color:#ffe6d6;margin:10px 0 18px;line-height:1.45">{{ calentadorTipo }}</div>
+          <p style="font-size:14.5px;line-height:1.55;color:#fff;margin:0;flex:1;text-wrap:pretty">{{ calentadorNota }}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:24px">
+            <a href="{{ waCalentador }}" target="_blank" rel="noopener" style="padding:15px 22px;border-radius:17px;font-weight:600;font-size:14.5px;color:#7a2710;background:#fff" style-hover="transform:translateY(-2px)">Pedir cotización</a>
+            <a href="Servicios.dc.html#calentadores" style="padding:15px 22px;border-radius:17px;font-weight:600;font-size:14.5px;color:#fff;border:1px solid rgba(255,255,255,.45)" style-hover="background:rgba(255,255,255,.14)">Ver modelos</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="asesor" style="position:relative;z-index:1;padding:clamp(40px,7vh,90px) clamp(16px,4vw,40px);scroll-margin-top:90px">
+    <div style="max-width:1180px;margin:0 auto">
+      <div data-rv style="margin-bottom:26px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.2em;color:#5b6b83;margin-bottom:14px">03 · ASESOR</div>
+        <h2 style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(26px,3.8vw,42px);line-height:1.04;letter-spacing:-.04em;margin:0;max-width:26ch;text-wrap:balance">Pregúntale al técnico lo que quieras</h2>
+      </div>
+
+      <div data-rv style="display:flex;flex-direction:column;border-radius:28px;padding:clamp(20px,3vw,30px);background:rgba(255,255,255,.45);border:1px solid rgba(22,35,58,.09);min-height:440px">
+        <div ref="{{ chatRef }}" style="flex:1;overflow-y:auto;display:grid;gap:12px;align-content:start;max-height:330px;padding-right:4px;margin-bottom:16px">
+          <sc-for list="{{ chat }}" as="m" hint-placeholder-count="2">
+            <div style="max-width:84%;justify-self:{{ m.side }};padding:14px 17px;border-radius:{{ m.radius }};font-size:14.5px;line-height:1.55;background:{{ m.bg }};color:{{ m.ink }};border:1px solid {{ m.border }};white-space:pre-wrap">{{ m.text }}</div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+          <sc-for list="{{ chatChips }}" as="c" hint-placeholder-count="3">
+            <button onClick="{{ c.pick }}" style="min-height:44px;padding:11px 15px;border:0;border-radius:14px;font-family:inherit;font-weight:500;font-size:12.5px;color:#16233a;background:#e9edf2;box-shadow:5px 5px 12px #c7ced8,-5px -5px 12px #ffffff;cursor:pointer">{{ c.label }}</button>
+          </sc-for>
+        </div>
+
+        <form onSubmit="{{ onSend }}" style="display:flex;gap:10px;align-items:center;padding:7px 7px 7px 18px;border-radius:20px;background:rgba(255,255,255,.7);border:1px solid rgba(22,35,58,.12)">
+          <input value="{{ draft }}" onChange="{{ onDraft }}" onInput="{{ onDraft }}" placeholder="Tengo dos baños y cocina a gas…" style="flex:1;min-width:0;border:0;background:transparent;font-family:inherit;font-size:14.5px;color:#16233a;outline:none">
+          <button type="submit" aria-label="Enviar" style="flex:none;width:46px;height:46px;border:0;border-radius:15px;cursor:pointer;display:grid;place-items:center;color:#16233a;background:#e9edf2;box-shadow:5px 5px 12px #c7ced8,-5px -5px 12px #ffffff">
+            <sc-if value="{{ sending }}" hint-placeholder-val="{{ false }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"></path></svg>
+            </sc-if>
+            <sc-if value="{{ notSending }}" hint-placeholder-val="{{ true }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"></path></svg>
+            </sc-if>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer style="position:relative;z-index:1;padding:20px clamp(16px,4vw,40px) 40px">
+    <div style="max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font-size:12.5px;color:#5b6b83;border-top:1px solid rgba(22,35,58,.1);padding-top:22px">
+      <span>© 2026 Casa del Gas · Casa del Aire Acondicionado</span>
+      <a href="Inicio.dc.html">Volver al inicio</a>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;573000000000&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Negocio&quot;}}">
+class Component extends DCLogic {
+  state = {
+    tab: 'manual',
+    ancho: 3.5, largo: 4, alto: 2.4, personas: 2, ventanas: 2, sol: 'media',
+    banos: 2, simul: 'no', tiro: 'interior',
+    camOn: false, camError: '', camRef: '2.05', pts: [],
+    chat: [{ who: 'bot', text: 'Cuéntame qué necesitas: un aire para una habitación, un calentador, revisión de gas o algo de ferretería. Te digo qué equipo te sirve.' }],
+    draft: '', sending: false
+  };
+
+  componentDidMount() {
+    import('./page-chrome.js').then(m => m.initPageChrome()).catch(() => {});
+    this.io = new IntersectionObserver(es => es.forEach((e, i) => {
+      if (e.isIntersecting) { e.target.style.transitionDelay = (Math.min(i, 4) * 70) + 'ms'; e.target.classList.add('in'); }
+    }), { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+    this.scan = () => document.querySelectorAll('[data-rv]').forEach(el => {
+      if (el.__obs) return;
+      el.__obs = 1;
+      this.io.observe(el);
+    });
+    this.arm = () => {
+      if (this.armed) return;
+      this.armed = true;
+      const vh = innerHeight;
+      document.querySelectorAll('[data-rv]').forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < vh * 0.95 && r.bottom > 0) el.classList.add('in');
+      });
+      document.documentElement.classList.add('js-anim');
+      this.scan();
+    };
+    ['scroll', 'wheel', 'touchstart'].forEach(ev => addEventListener(ev, this.arm, { passive: true, capture: true, once: true }));
+    document.addEventListener('scroll', this.arm, { passive: true, capture: true, once: true });
+    this.sweep = setInterval(() => {
+      if (!this.armed) return;
+      this.scan();
+      const vh = innerHeight;
+      document.querySelectorAll('[data-rv]:not(.in)').forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < vh * 0.9 && r.bottom > 0) el.classList.add('in');
+      });
+    }, 350);
+  }
+  componentWillUnmount() {
+    clearInterval(this.sweep);
+    if (this.io) this.io.disconnect();
+    this.stopCam();
+  }
+
+  async startCam() {
+    try {
+      const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+      this.stream = s;
+      this.setState({ camOn: true, camError: '', pts: [] }, () => {
+        if (this.video) { this.video.srcObject = s; this.video.play().catch(() => {}); }
+      });
+    } catch (err) {
+      this.setState({ camError: 'No pudimos abrir la cámara (' + (err && err.name ? err.name : 'error') + '). Usa el modo a mano.' });
+    }
+  }
+  stopCam() { if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; } }
+
+  applyMeasure(pts) {
+    const ref = parseFloat(this.state.camRef) || 2.05;
+    const d = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    const refPx = d(pts[0], pts[1]);
+    if (!refPx) return;
+    const scale = ref / refPx;
+    const patch = {};
+    if (pts.length >= 4) patch.ancho = Math.max(0.5, Math.round(d(pts[2], pts[3]) * scale * 10) / 10);
+    if (pts.length >= 6) patch.largo = Math.max(0.5, Math.round(d(pts[4], pts[5]) * scale * 10) / 10);
+    this.setState(patch);
+  }
+
+  scrollChat() { if (this.chatEl) this.chatEl.scrollTop = this.chatEl.scrollHeight; }
+
+  async send(text) {
+    const q = (text || '').trim();
+    if (!q || this.state.sending) return;
+    this.setState(p => ({ chat: [...p.chat, { who: 'me', text: q }], draft: '', sending: true }), () => this.scrollChat());
+    const sys = 'Eres el asesor técnico de La Casa del Gas y La Casa del Aire Acondicionado (Colombia): venta, instalación, mantenimiento y reparación de aires acondicionados y calentadores, redes de gas con certificación legal, y ferretería. Marcas aliadas: Bosch, Oka, LG, Titanum. Responde SIEMPRE en español, en TEXTO PLANO: sin Markdown, sin títulos, sin asteriscos, sin viñetas, sin emojis ni símbolos decorativos. Máximo 70 palabras en uno o dos párrafos cortos. Sé concreto: da la capacidad en BTU o el litraje recomendado cuando puedas y cierra invitando a cotizar por WhatsApp. No inventes precios ni direcciones.';
+    try {
+      const r = await window.claude.complete(q, { system: sys, maxTokens: 260 });
+      const out = typeof r === 'string' ? r : (r && (r.text || r.completion)) || '';
+      this.setState(p => ({ chat: [...p.chat, { who: 'bot', text: this.clean(out) || this.fallback(q) }], sending: false }), () => this.scrollChat());
+    } catch (err) {
+      this.setState(p => ({ chat: [...p.chat, { who: 'bot', text: this.fallback(q) }], sending: false }), () => this.scrollChat());
+    }
+  }
+
+  clean(t) {
+    if (!t) return '';
+    let s = String(t)
+      .replace(/[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{20E3}]/gu, '')
+      .replace(/^\s{0,3}#{1,6}\s*/gm, '')
+      .replace(/\*\*|__|`+/g, '')
+      .replace(/^\s*[-*•]\s+/gm, '')
+      .replace(/^\s*\d+\.\s+/gm, '')
+      .replace(/\n{3,}/g, '\n\n')
+      .replace(/[ \t]{2,}/g, ' ')
+      .trim();
+    if (s.length > 520) {
+      const cut = s.slice(0, 520);
+      const stop = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('.\n'));
+      s = (stop > 200 ? cut.slice(0, stop + 1) : cut.trim() + '…');
+    }
+    return s;
+  }
+
+  fallback(q) {
+    const s = q.toLowerCase();
+    if (s.includes('baño') || s.includes('calentador')) return 'Para dos baños te sirve un calentador de paso de 10 a 12 litros/min; si usan ducha y cocina al mismo tiempo, sube a 13. Si va en baño o zona cerrada, debe ser de tiro forzado. Escríbenos por WhatsApp y te cotizamos con instalación.';
+    if (s.includes('lav') || s.includes('manten')) return 'Un aire residencial pide mantenimiento cada 6 meses; en zona de mucho polvo o uso diario, cada 4. Incluye lavado de filtros, evaporador, condensador y revisión de presiones.';
+    if (s.includes('gas') || s.includes('certific')) return 'Para certificar tu red revisamos tubería, hacemos prueba de hermeticidad y verificamos ventilaciones; luego se emite el certificado para el operador de red.';
+    return 'Dime el área del espacio o cuántos baños tienes y te doy la capacidad exacta. También puedes usar la calculadora de arriba y enviarnos el resultado por WhatsApp.';
+  }
+
+  renderVals() {
+    const s = this.state;
+    const raised = '6px 6px 14px #c7ced8,-6px -6px 14px #ffffff';
+    const pressed = 'inset 5px 5px 11px #c7ced8,inset -5px -5px 11px #ffffff';
+    const sh = on => on ? pressed : raised;
+
+    const area = Math.max(1, (parseFloat(s.ancho) || 0) * (parseFloat(s.largo) || 0));
+    const volFactor = Math.min(1.25, Math.max(1, (parseFloat(s.alto) || 2.4) / 2.4));
+    const solK = s.sol === 'alta' ? 750 : s.sol === 'baja' ? 550 : 640;
+    let btu = area * solK * volFactor + Math.max(0, s.personas - 1) * 600 + s.ventanas * 450;
+    btu = Math.round(btu / 500) * 500;
+    const caps = [9000, 12000, 18000, 24000, 36000, 48000];
+    const cap = caps.find(c => c >= btu) || 60000;
+    const recEquipo = cap <= 12000 ? 'Minisplit inverter ' + cap.toLocaleString('es-CO') + ' BTU'
+      : cap <= 24000 ? 'Split inverter ' + cap.toLocaleString('es-CO') + ' BTU'
+      : 'Equipo comercial ' + cap.toLocaleString('es-CO') + ' BTU (o dos unidades)';
+
+    const litrosBase = s.banos <= 1 ? 6 : s.banos === 2 ? 10 : s.banos === 3 ? 13 : 16;
+    const litros = s.simul === 'si' ? Math.min(20, litrosBase + 3) : litrosBase;
+
+    const colors = ['#7fc4ff', '#7fc4ff', '#ffb066', '#ffb066', '#7ee2a8', '#7ee2a8'];
+    const marks = s.pts.map((p, i) => ({ x: (p.x * 100).toFixed(2), y: (p.y * 100).toFixed(2), color: colors[i] || '#fff' }));
+    let camLine = false;
+    if (s.pts.length >= 2 && s.pts.length % 2 === 0) {
+      const a = s.pts[s.pts.length - 2], b = s.pts[s.pts.length - 1];
+      camLine = { x1: (a.x * 100).toFixed(2), y1: (a.y * 100).toFixed(2), x2: (b.x * 100).toFixed(2), y2: (b.y * 100).toFixed(2), color: colors[s.pts.length - 1] };
+    }
+    const stepIdx = s.pts.length >= 6 ? 4 : s.pts.length >= 4 ? 3 : s.pts.length >= 2 ? 2 : (s.camOn ? 1 : 0);
+    const camHints = [
+      'Activa la cámara para empezar.',
+      'Paso 1 · Toca la base y luego la parte alta de tu referencia (por defecto, una puerta de 2,05 m).',
+      'Paso 2 · Toca la esquina izquierda y la derecha de la pared donde irá el equipo.',
+      'Paso 3 · Toca el piso y el techo para el fondo de la habitación.',
+      'Listo · Las medidas pasaron a los campos de abajo. Ajusta a mano si quieres.'
+    ];
+    const camSteps = [
+      { n: '1', label: 'Referencia conocida' },
+      { n: '2', label: 'Ancho de la pared' },
+      { n: '3', label: 'Fondo del espacio' }
+    ].map((st, i) => {
+      const active = stepIdx === i + 1;
+      return { n: st.n, label: st.label, bg: active ? 'rgba(255,255,255,.62)' : 'rgba(255,255,255,.35)', border: active ? 'rgba(21,83,168,.35)' : 'rgba(22,35,58,.09)', ink: active ? '#16233a' : '#51617a' };
+    });
+
+    const wa = (this.props.whatsapp ?? '573000000000').replace(/[^0-9]/g, '') || '573000000000';
+    const waText = encodeURIComponent('Hola, vengo de la página. Mi espacio mide ' + s.ancho + ' x ' + s.largo + ' m (alto ' + s.alto + ' m) y me recomendó ' + recEquipo + '. ¿Me cotizan instalación?');
+    const waCal = encodeURIComponent('Hola, vengo de la página. Tengo ' + s.banos + ' baño(s), uso simultáneo: ' + (s.simul === 'si' ? 'sí' : 'no') + ', ubicación: ' + (s.tiro === 'interior' ? 'zona cerrada' : 'zona ventilada') + '. Me recomendó un calentador de ' + litros + ' litros. ¿Me cotizan?');
+
+    return {
+      whatsapp: this.props.whatsapp ?? '573000000000',
+      waLink: 'https://wa.me/' + wa,
+      isCamara: s.tab === 'camara',
+      shManual: sh(s.tab === 'manual'),
+      shCamara: sh(s.tab === 'camara'),
+      tabManual: () => this.setState({ tab: 'manual' }),
+      tabCamara: () => this.setState({ tab: 'camara' }),
+
+      camIdle: !s.camOn,
+      camError: s.camError,
+      camNeedsRef: s.camOn && s.pts.length < 2,
+      camRef: s.camRef,
+      camSteps, camMarks: marks, camLine,
+      camHint: camHints[stepIdx],
+      videoRef: el => { this.video = el; if (el && this.stream && el.srcObject !== this.stream) { el.srcObject = this.stream; el.play().catch(() => {}); } },
+      startCam: () => this.startCam(),
+      resetCam: () => this.setState({ pts: [] }),
+      onRefChange: e => this.setState({ camRef: e.target.value }),
+      onCamTap: e => {
+        if (!s.camOn) return;
+        const r = e.currentTarget.getBoundingClientRect();
+        const p = { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height };
+        const pts = [...s.pts, p].slice(0, 6);
+        this.setState({ pts }, () => { if (pts.length >= 2 && pts.length % 2 === 0) this.applyMeasure(pts); });
+      },
+
+      ancho: s.ancho, largo: s.largo, alto: s.alto, personas: s.personas, ventanas: s.ventanas,
+      onAncho: e => this.setState({ ancho: e.target.value }),
+      onLargo: e => this.setState({ largo: e.target.value }),
+      onAlto: e => this.setState({ alto: e.target.value }),
+      onPersonas: e => this.setState({ personas: +e.target.value }),
+      onVentanas: e => this.setState({ ventanas: +e.target.value }),
+      solOptions: [
+        { key: 'baja', label: 'Poco sol' },
+        { key: 'media', label: 'Normal' },
+        { key: 'alta', label: 'Sol directo' }
+      ].map(o => ({ label: o.label, pick: () => this.setState({ sol: o.key }), shadow: sh(s.sol === o.key) })),
+
+      btuLabel: btu.toLocaleString('es-CO'),
+      areaLabel: area.toFixed(1),
+      recEquipo,
+      recLines: [
+        'Carga calculada: ' + btu.toLocaleString('es-CO') + ' BTU/h para ' + area.toFixed(1) + ' m².',
+        'Equipo sugerido: ' + recEquipo + '.',
+        s.sol === 'alta' ? 'Sol directo: sumamos carga extra, no bajes de esta capacidad.' : 'Exposición ' + s.sol + ': la capacidad queda holgada.',
+        'Incluye instalación con tubería, soportes y vacío al sistema.'
+      ],
+      waQuote: 'https://wa.me/' + wa + '?text=' + waText,
+
+      banosOptions: [1, 2, 3, 4].map(n => ({ label: n === 4 ? '4+' : String(n), pick: () => this.setState({ banos: n }), shadow: sh(s.banos === n) })),
+      simulOptions: [{ k: 'no', l: 'Uno a la vez' }, { k: 'si', l: 'Dos a la vez' }].map(o => ({ label: o.l, pick: () => this.setState({ simul: o.k }), shadow: sh(s.simul === o.k) })),
+      tiroOptions: [{ k: 'interior', l: 'Baño o zona cerrada' }, { k: 'exterior', l: 'Patio ventilado' }].map(o => ({ label: o.l, pick: () => this.setState({ tiro: o.k }), shadow: sh(s.tiro === o.k) })),
+      litrosLabel: litros + ' litros/min',
+      calentadorTipo: s.tiro === 'interior' ? 'Tiro forzado · obligatorio en baño o zona cerrada' : 'Tiro natural · patio o zona ventilada',
+      calentadorNota: s.banos <= 1
+        ? 'Con un solo baño, un calentador de paso de ' + litros + ' litros rinde de sobra y gasta menos gas.'
+        : s.simul === 'si'
+          ? 'Como usan agua caliente en dos puntos a la vez, subimos a ' + litros + ' litros para que no caiga la presión.'
+          : 'Para ' + s.banos + ' baños en uso alternado, ' + litros + ' litros es el punto justo entre caudal y consumo.',
+      waCalentador: 'https://wa.me/' + wa + '?text=' + waCal,
+
+      chat: s.chat.map(m => m.who === 'me'
+        ? { text: m.text, side: 'end', bg: '#16233a', ink: '#f2f6fa', border: 'transparent', radius: '18px 18px 6px 18px' }
+        : { text: m.text, side: 'start', bg: 'rgba(255,255,255,.75)', ink: '#2b3c57', border: 'rgba(22,35,58,.1)', radius: '18px 18px 18px 6px' }),
+      chatChips: [
+        'Quiero instalar un calentador y tengo dos baños',
+        '¿Cada cuánto se lava un aire acondicionado?',
+        '¿Qué necesito para certificar mi red de gas?'
+      ].map(q => ({ label: q.length > 36 ? q.slice(0, 34) + '…' : q, pick: () => this.send(q) })),
+      draft: s.draft,
+      sending: s.sending,
+      notSending: !s.sending,
+      onDraft: e => this.setState({ draft: e.target.value }),
+      onSend: e => { e.preventDefault(); this.send(s.draft); },
+      chatRef: el => { this.chatEl = el; }
+    };
+  }
+}
+</script>
+</body>
+</html>

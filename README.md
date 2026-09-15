@@ -13,9 +13,11 @@ y ferretería). La página vive en `Inicio.dc.html` e incluye:
 
 - Un selector de temperatura interactivo (perilla) que mezcla el look "frío" y
   "calor" del hero según el valor elegido.
-- Secciones de servicios, herramientas (calculadora de BTU, preguntas al técnico)
-  y marcas aliadas.
-- Navegación (`Nav.dc.html`) compartida entre páginas del sitio.
+- `Servicios.dc.html`: aires, calentadores, gas y ferretería, cada uno con su
+  sección propia.
+- `Herramientas.dc.html`: calculadora de BTU (a mano o con la cámara), litraje
+  de calentador y un chat de preguntas al "asesor" técnico.
+- Navegación (`Nav.dc.html`) compartida entre las tres páginas.
 
 ## Cómo funciona técnicamente
 
@@ -30,15 +32,24 @@ Por eso no hay build step: son archivos estáticos que cualquier hosting
 (incluido Netlify) puede servir tal cual.
 
 ```
-Inicio.dc.html     Página principal
-Nav.dc.html         Barra de navegación (importada por dc-import)
-support.js          Runtime que interpreta los .dc.html (generado, no editar a mano)
-boot-intro.js        Animación de entrada / transición entre páginas
-page-chrome.js        Lógica de la transición de entrada, cargada dinámicamente
-index.html           Redirección a Inicio.dc.html (para servir algo en "/")
-netlify.toml         Configuración de despliegue en Netlify
-assets/               Imágenes del sitio
+Inicio.dc.html          Página principal
+Servicios.dc.html        Aires, calentadores, gas, ferretería
+Herramientas.dc.html      Calculadoras y chat del asesor
+Nav.dc.html                Barra de navegación (importada por dc-import en cada página)
+support.js                  Runtime que interpreta los .dc.html (generado, no editar a mano)
+boot-intro.js                 Animación de entrada / transición entre páginas
+page-chrome.js                  Lógica de la transición de entrada, cargada dinámicamente
+index.html                        Redirección a Inicio.dc.html (para servir algo en "/")
+netlify.toml                        Configuración de despliegue en Netlify
+assets/                                Imágenes del sitio
 ```
+
+La calculadora con cámara pide permiso de cámara al navegador (`getUserMedia`) y
+el chat del asesor intenta usar `window.claude.complete(...)`, una API que solo
+existe dentro del entorno de Claude Design. Fuera de ahí (como en Netlify) esa
+llamada falla silenciosamente y el chat responde con las respuestas de
+respaldo ya escritas en el código — no rompe la página, pero no es un chat con
+IA real todavía.
 
 ## Desplegar en Netlify
 
@@ -57,8 +68,10 @@ sin conectar Git.
 
 ## Estado conocido / pendientes
 
-- Las páginas `Servicios.dc.html` y `Herramientas.dc.html` (enlazadas desde el
-  menú y desde el inicio) todavía no están incluidas en este repo — por ahora
-  esos enlaces no llevan a ninguna parte. Se agregan en un commit posterior.
+- Falta `assets/ferreteria.jpg` (una de las fotos de la sección de ferretería
+  en `Servicios.dc.html`) — se agrega en un commit posterior.
+- El chat de "Pregúntale al técnico" usa respuestas de respaldo fijas fuera del
+  entorno de Claude Design (ver arriba); conectarlo a un modelo real es trabajo
+  pendiente.
 - Los datos de contacto (WhatsApp, etc.) son de prueba y hay que reemplazarlos
   por los reales antes de publicar la versión definitiva.

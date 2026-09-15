@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:#e9edf2; font-family:'Outfit',system-ui,sans-serif; color:#16233a; overflow-x:hidden; }
+  a { color:#16233a; text-decoration:none; }
+  a:hover { color:#1553a8; }
+  ::selection { background:#16233a; color:#fff; }
+  .js-anim [data-rv] { opacity:0; transform:translateY(28px); transition:opacity .9s cubic-bezier(.16,.84,.26,1), transform .9s cubic-bezier(.16,.84,.26,1); }
+  .js-anim [data-rv].in { opacity:1; transform:none; }
+</style>
+<script src="boot-intro.js"></script>
+</helmet>
+
+<div data-page style="position:relative;isolation:isolate">
+
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(110vw 70vh at 78% -14%, rgba(186,220,255,.5) 0%, rgba(233,237,242,0) 60%), radial-gradient(90vw 60vh at 12% 108%, rgba(255,222,190,.55) 0%, rgba(233,237,242,0) 58%)"></div>
+
+  <dc-import name="Nav" active="servicios" whatsapp="{{ whatsapp }}" hint-size="100%,70px"></dc-import>
+
+  <section style="position:relative;z-index:1;padding:clamp(120px,18vh,180px) clamp(16px,4vw,40px) clamp(40px,6vh,70px)">
+    <div style="max-width:1180px;margin:0 auto">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.2em;color:#5b6b83;margin-bottom:18px">SERVICIOS</div>
+      <h1 style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(36px,6vw,74px);line-height:.98;letter-spacing:-.045em;margin:0 0 24px;max-width:22ch;text-wrap:balance">Todo lo que instalamos, mantenemos y certificamos.</h1>
+      <p style="font-size:clamp(16px,1.8vw,19px);line-height:1.55;color:#44546e;margin:0 0 34px;max-width:52ch;text-wrap:pretty">Cuatro frentes, dos sedes y un mismo equipo técnico. Elige por dónde empezar.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        <sc-for list="{{ anclas }}" as="a" hint-placeholder-count="4">
+          <a href="{{ a.href }}" style="padding:13px 19px;border-radius:15px;font-size:14px;font-weight:600;color:#16233a;background:#e9edf2;box-shadow:6px 6px 14px #c7ced8,-6px -6px 14px #ffffff" style-hover="box-shadow:inset 5px 5px 11px #c7ced8,inset -5px -5px 11px #ffffff">{{ a.label }}</a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="aires" style="position:relative;z-index:1;padding:clamp(50px,9vh,110px) clamp(16px,4vw,40px);scroll-margin-top:90px">
+    <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(28px,5vw,72px);align-items:start">
+      <div style="position:sticky;top:110px">
+        <div data-rv style="font-size:11px;font-weight:600;letter-spacing:.2em;color:#5b6b83;margin-bottom:16px">01 · AIRE ACONDICIONADO</div>
+        <h2 data-rv style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(28px,4.2vw,46px);line-height:1.03;letter-spacing:-.04em;margin:0 0 18px;text-wrap:balance">Venta e instalación de splits y minisplits</h2>
+        <p data-rv style="font-size:16px;line-height:1.6;color:#44546e;margin:0 0 22px;max-width:36ch;text-wrap:pretty">Calculamos la carga real del espacio antes de vender el equipo: ni pagas de más ni te queda corto.</p>
+        <a data-rv href="Herramientas.dc.html#medir" style="display:inline-block;padding:14px 20px;border-radius:15px;font-size:14px;font-weight:600;color:#16233a;background:#e9edf2;box-shadow:6px 6px 14px #c7ced8,-6px -6px 14px #ffffff" style-hover="box-shadow:inset 5px 5px 11px #c7ced8,inset -5px -5px 11px #ffffff">Calcular mis BTU</a>
+      </div>
+
+      <div style="display:grid;gap:18px">
+        <div data-rv style="border-radius:26px;overflow:hidden;background:rgba(255,255,255,.4);border:1px solid rgba(22,35,58,.09);padding:clamp(20px,3vw,30px)">
+          <img src="assets/aire-split.png" alt="Split de pared LG" style="width:100%;max-width:420px;display:block;margin:0 auto 18px;mix-blend-mode:multiply">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px;border-top:1px solid rgba(22,35,58,.1);padding-top:18px">
+            <sc-for list="{{ capacidades }}" as="c" hint-placeholder-count="4">
+              <div>
+                <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:17px;letter-spacing:-.02em">{{ c.btu }}</div>
+                <div style="font-size:13px;color:#51617a;line-height:1.4;margin-top:4px">{{ c.uso }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:grid;gap:1px;background:rgba(22,35,58,.1);border-radius:22px;overflow:hidden">
+          <sc-for list="{{ serviciosAire }}" as="s" hint-placeholder-count="4">
+            <div data-rv style="background:#e9edf2;padding:clamp(18px,2.6vw,24px);display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start">
+              <span style="font-family:'Sora',sans-serif;font-size:11.5px;font-weight:600;color:#566880;letter-spacing:.08em;padding-top:3px">{{ s.n }}</span>
+              <span>
+                <span style="display:block;font-family:'Sora',sans-serif;font-weight:600;font-size:18px;letter-spacing:-.025em">{{ s.title }}</span>
+                <span style="display:block;font-size:14.5px;line-height:1.55;color:#51617a;margin-top:6px;max-width:46ch">{{ s.body }}</span>
+              </span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="calentadores" style="position:relative;z-index:1;padding:clamp(50px,9vh,110px) clamp(16px,4vw,40px);scroll-margin-top:90px">
+    <div style="max-width:1180px;margin:0 auto">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(28px,5vw,72px);align-items:start;margin-bottom:clamp(26px,4vw,44px)">
+        <div>
+          <div data-rv style="font-size:11px;font-weight:600;letter-spacing:.2em;color:#5b6b83;margin-bottom:16px">02 · CALENTADORES</div>
+          <h2 data-rv style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(28px,4.2vw,46px);line-height:1.03;letter-spacing:-.04em;margin:0 0 18px;text-wrap:balance">Agua caliente que aguanta el día entero</h2>
+        </div>
+        <div>
+          <p data-rv style="font-size:16px;line-height:1.6;color:#44546e;margin:0 0 20px;max-width:44ch;text-wrap:pretty">De paso continuo, tiro natural o forzado. Instalamos con la ventilación que exige la norma y probamos el equipo antes de entregarlo. Existencias en las dos sedes.</p>
+          <a data-rv href="Herramientas.dc.html#calentador" style="display:inline-block;padding:14px 20px;border-radius:15px;font-size:14px;font-weight:600;color:#16233a;background:#e9edf2;box-shadow:6px 6px 14px #c7ced8,-6px -6px 14px #ffffff" style-hover="box-shadow:inset 5px 5px 11px #c7ced8,inset -5px -5px 11px #ffffff">¿Cuántos litros necesito?</a>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px;align-items:stretch">
+        <sc-for list="{{ calentadores }}" as="c" hint-placeholder-count="5">
+          <article data-rv style="display:flex;flex-direction:column;height:100%;border-radius:24px;overflow:hidden;background:rgba(255,255,255,.4);border:1px solid rgba(22,35,58,.09);transition:border-color .5s ease,background .5s ease" style-hover="border-color:rgba(22,35,58,.2);background:rgba(255,255,255,.58)">
+            <div style="aspect-ratio:3/4;overflow:hidden;background:#dfe5ec">
+              <img src="{{ c.img }}" alt="{{ c.alt }}" style="width:100%;height:100%;object-fit:cover;display:block">
+            </div>
+            <div style="padding:18px;display:flex;flex-direction:column;flex:1">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.16em;color:#5b6b83;margin-bottom:8px">{{ c.marca }}</div>
+              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:19px;letter-spacing:-.03em;line-height:1.15">{{ c.litros }}</div>
+              <div style="font-size:13.5px;color:#51617a;line-height:1.5;margin-top:8px;flex:1">{{ c.nota }}</div>
+              <div style="font-size:12px;font-weight:600;color:#44546e;margin-top:14px;padding-top:12px;border-top:1px solid rgba(22,35,58,.1)">{{ c.modelo }}</div>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="gas" style="position:relative;z-index:1;padding:clamp(50px,9vh,110px) clamp(16px,4vw,40px);scroll-margin-top:90px">
+    <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(28px,5vw,72px);align-items:start">
+      <div style="position:sticky;top:110px">
+        <div data-rv style="font-size:11px;font-weight:600;letter-spacing:.2em;color:#5b6b83;margin-bottom:16px">03 · GAS</div>
+        <h2 data-rv style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(28px,4.2vw,46px);line-height:1.03;letter-spacing:-.04em;margin:0 0 18px;text-wrap:balance">Redes internas con certificación legal</h2>
+        <p data-rv style="font-size:16px;line-height:1.6;color:#44546e;margin:0 0 22px;max-width:36ch;text-wrap:pretty">Tubería, puntos nuevos, reparación de fugas, prueba de hermeticidad y el certificado que pide el operador de red.</p>
+        <div data-rv style="border-radius:22px;overflow:hidden;border:1px solid rgba(22,35,58,.09)">
+          <img src="assets/accesorios-gas.jpg" alt="Accesorios de bronce para gas" style="width:100%;height:190px;object-fit:cover;display:block">
+        </div>
+      </div>
+      <div style="display:grid;gap:1px;background:rgba(22,35,58,.1);border-radius:22px;overflow:hidden">
+        <sc-for list="{{ serviciosGas }}" as="s" hint-placeholder-count="5">
+          <div data-rv style="background:#e9edf2;padding:clamp(18px,2.6vw,24px);display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start">
+            <span style="font-family:'Sora',sans-serif;font-size:11.5px;font-weight:600;color:#566880;letter-spacing:.08em;padding-top:3px">{{ s.n }}</span>
+            <span>
+              <span style="display:block;font-family:'Sora',sans-serif;font-weight:600;font-size:18px;letter-spacing:-.025em">{{ s.title }}</span>
+              <span style="display:block;font-size:14.5px;line-height:1.55;color:#51617a;margin-top:6px;max-width:46ch">{{ s.body }}</span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="ferreteria" style="position:relative;z-index:1;padding:clamp(50px,9vh,110px) clamp(16px,4vw,40px) clamp(60px,10vh,120px);scroll-margin-top:90px">
+    <div style="max-width:1180px;margin:0 auto">
+      <div data-rv style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(28px,5vw,72px);align-items:end;margin-bottom:clamp(24px,4vw,40px)">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.2em;color:#5b6b83;margin-bottom:16px">04 · FERRETERÍA</div>
+          <h2 style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(28px,4.2vw,46px);line-height:1.03;letter-spacing:-.04em;margin:0;text-wrap:balance">Repuestos y accesorios en mostrador</h2>
+        </div>
+        <p style="font-size:16px;line-height:1.6;color:#44546e;margin:0;max-width:42ch;text-wrap:pretty">Válvulas, termocuplas, mangueras, reguladores, accesorios de bronce Oka, herramienta y todo lo que se necesita para una instalación bien hecha.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px">
+        <sc-for list="{{ ferreteria }}" as="f" hint-placeholder-count="3">
+          <figure data-rv style="margin:0;border-radius:24px;overflow:hidden;border:1px solid rgba(22,35,58,.09);background:rgba(255,255,255,.4)">
+            <img src="{{ f.img }}" alt="{{ f.alt }}" style="width:100%;height:240px;object-fit:cover;display:block">
+            <figcaption style="padding:16px 18px;font-size:14px;font-weight:600;color:#44546e">{{ f.label }}</figcaption>
+          </figure>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="position:relative;z-index:1;padding:0 clamp(16px,4vw,40px) clamp(50px,9vh,100px)">
+    <div data-rv style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(24px,4vw,56px);align-items:center;padding-top:clamp(30px,5vw,50px);border-top:1px solid rgba(22,35,58,.12)">
+      <div>
+        <h2 style="font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(26px,3.6vw,40px);line-height:1.04;letter-spacing:-.04em;margin:0 0 20px;text-wrap:balance">Dinos qué necesitas y te cotizamos.</h2>
+        <a href="{{ waLink }}" target="_blank" rel="noopener" style="display:inline-block;padding:16px 24px;border-radius:17px;font-size:15px;font-weight:600;color:#16233a;background:#e9edf2;box-shadow:8px 8px 18px #c7ced8,-8px -8px 18px #ffffff" style-hover="box-shadow:inset 6px 6px 13px #c7ced8,inset -6px -6px 13px #ffffff">Escribir por WhatsApp</a>
+      </div>
+      <div style="display:grid;gap:10px;font-size:14.5px;color:#44546e">
+        <div style="display:flex;justify-content:space-between;gap:16px;padding-bottom:10px;border-bottom:1px solid rgba(22,35,58,.1)"><span style="color:#51617a">Lunes a viernes</span><span style="font-weight:600">7:30 am – 6:00 pm</span></div>
+        <div style="display:flex;justify-content:space-between;gap:16px;padding-bottom:10px;border-bottom:1px solid rgba(22,35,58,.1)"><span style="color:#51617a">Sábados</span><span style="font-weight:600">7:30 am – 5:00 pm</span></div>
+        <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:#51617a">Festivos</span><span style="font-weight:600">8:00 am – 12:00 m</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="position:relative;z-index:1;padding:0 clamp(16px,4vw,40px) 40px">
+    <div style="max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font-size:12.5px;color:#5b6b83;border-top:1px solid rgba(22,35,58,.1);padding-top:22px">
+      <span>© 2026 Casa del Gas · Casa del Aire Acondicionado</span>
+      <a href="Inicio.dc.html">Volver al inicio</a>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;573000000000&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Negocio&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    import('./page-chrome.js').then(m => m.initPageChrome()).catch(() => {});
+    this.io = new IntersectionObserver(es => es.forEach((e, i) => {
+      if (e.isIntersecting) { e.target.style.transitionDelay = (Math.min(i, 5) * 70) + 'ms'; e.target.classList.add('in'); }
+    }), { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+    this.scan = () => document.querySelectorAll('[data-rv]').forEach(el => {
+      if (el.__obs) return;
+      el.__obs = 1;
+      this.io.observe(el);
+    });
+
+    // el contenido nace visible; el modo animado se arma con el primer scroll real
+    this.arm = () => {
+      if (this.armed) return;
+      this.armed = true;
+      const vh = innerHeight;
+      document.querySelectorAll('[data-rv]').forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < vh * 0.95 && r.bottom > 0) el.classList.add('in');
+      });
+      document.documentElement.classList.add('js-anim');
+      this.scan();
+    };
+    ['scroll', 'wheel', 'touchstart'].forEach(ev => addEventListener(ev, this.arm, { passive: true, capture: true, once: true }));
+    document.addEventListener('scroll', this.arm, { passive: true, capture: true, once: true });
+
+    this.sweep = setInterval(() => {
+      if (!this.armed) return;
+      this.scan();
+      const vh = innerHeight;
+      document.querySelectorAll('[data-rv]:not(.in)').forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < vh * 0.9 && r.bottom > 0) el.classList.add('in');
+      });
+    }, 350);
+  }
+  componentWillUnmount() {
+    clearInterval(this.sweep);
+    if (this.io) this.io.disconnect();
+  }
+
+  renderVals() {
+    return {
+      whatsapp: this.props.whatsapp ?? '573000000000',
+      waLink: 'https://wa.me/' + ((this.props.whatsapp ?? '573000000000').replace(/[^0-9]/g, '') || '573000000000'),
+      anclas: [
+        { label: 'Aire acondicionado', href: '#aires' },
+        { label: 'Calentadores', href: '#calentadores' },
+        { label: 'Gas y certificación', href: '#gas' },
+        { label: 'Ferretería', href: '#ferreteria' }
+      ],
+      capacidades: [
+        { btu: '9.000 BTU', uso: 'Alcoba pequeña, hasta 12 m²' },
+        { btu: '12.000 BTU', uso: 'Alcoba o estudio, 12–18 m²' },
+        { btu: '18.000 BTU', uso: 'Sala-comedor, 18–28 m²' },
+        { btu: '24.000 BTU', uso: 'Espacios abiertos, 28–40 m²' }
+      ],
+      serviciosAire: [
+        { n: 'A', title: 'Instalación completa', body: 'Tubería de cobre, soportes, drenaje con pendiente y vacío al sistema antes de cargar el refrigerante.' },
+        { n: 'B', title: 'Mantenimiento preventivo', body: 'Lavado de filtros, evaporador y condensador, revisión de presiones y del consumo eléctrico. Cada 6 meses en uso residencial.' },
+        { n: 'C', title: 'Reparación', body: 'Fugas, tarjeta electrónica, compresor, sensores y goteos. Diagnóstico antes de cualquier cobro de repuesto.' },
+        { n: 'D', title: 'Traslado de equipos', body: 'Desmontaje, recuperación de gas y montaje en el nuevo punto sin perder la garantía del equipo.' }
+      ],
+      calentadores: [
+        { marca: 'BOSCH', litros: '10 litros/min', nota: 'Tiro natural, encendido automático. Dos baños en uso alternado.', modelo: 'Therm · gas natural', img: 'assets/cal-bosch-pared.jpg', alt: 'Calentador Bosch de paso' },
+        { marca: 'OKA', litros: '10 litros/min', nota: 'Tiro forzado con ducto. Apto para baño o zona cerrada.', modelo: '10 LTN · gas natural', img: 'assets/cal-oka-10.jpg', alt: 'Calentador Oka 10 litros' },
+        { marca: 'OKA', litros: '10 litros/min', nota: 'Panel digital, control de temperatura al grado.', modelo: 'JSQ20-10L · propano', img: 'assets/cal-oka-jsq20.jpg', alt: 'Calentador Oka JSQ20' },
+        { marca: 'OKA', litros: '5,5 litros/min', nota: 'Un baño. Pantalla táctil y consumo bajo.', modelo: '5.5 LTA-A · gas natural', img: 'assets/cal-oka-55.jpg', alt: 'Calentador Oka 5.5 litros' },
+        { marca: 'TITANUM', litros: '5,5 litros/min', nota: 'Opción económica para apartamento de un baño.', modelo: 'JSD10G · gas natural', img: 'assets/cal-titanum.jpg', alt: 'Calentador Titanum' }
+      ],
+      serviciosGas: [
+        { n: 'A', title: 'Instalación de red interna', body: 'Puntos para estufa, calentador, horno o secadora, con tubería y accesorios certificados.' },
+        { n: 'B', title: 'Certificación legal', body: 'Prueba de hermeticidad, revisión de ventilaciones y emisión del certificado para el operador de red.' },
+        { n: 'C', title: 'Detección y reparación de fugas', body: 'Localizamos el punto exacto y reparamos sin romper más de lo necesario.' },
+        { n: 'D', title: 'Mantenimiento de estufas y calentadores', body: 'Limpieza de quemadores, cambio de termocupla, ajuste de llama y revisión de presión.' },
+        { n: 'E', title: 'Traslado de puntos', body: 'Reubicación de la estufa o del calentador con obra menor y prueba final.' }
+      ],
+      ferreteria: [
+        { label: 'Repuestos para calentadores', img: 'assets/repuestos.jpg', alt: 'Válvulas y repuestos de calentadores' },
+        { label: 'Accesorios de bronce Oka', img: 'assets/accesorios-gas.jpg', alt: 'Accesorios de bronce para gas' },
+        { label: 'Herramienta y misceláneos', img: 'assets/ferreteria.jpg', alt: 'Mostrador de ferretería' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
