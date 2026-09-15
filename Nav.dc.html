@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<header style="position:fixed;top:0;left:0;right:0;z-index:60;padding:14px clamp(14px,4vw,40px);backdrop-filter:blur(12px);background:rgba(233,237,242,.78)">
+  <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:16px">
+    <a href="Inicio.dc.html" style="display:flex;align-items:center;gap:11px;flex:1;min-width:0">
+      <img data-logo src="assets/logo-casa-del-gas.png" alt="La Casa del Gas" style="width:40px;height:40px;object-fit:contain;flex:none">
+      <span style="font-family:'Sora',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.02em;line-height:1.15;white-space:nowrap">CASA DEL GAS<br><span style="font-weight:400;color:#566578;font-size:11px;letter-spacing:.05em">&amp; DEL AIRE ACONDICIONADO</span></span>
+    </a>
+
+    <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+      <nav style="display:flex;align-items:center;gap:4px">
+        <sc-for list="{{ items }}" as="i" hint-placeholder-count="3">
+          <a href="{{ i.href }}" style="padding:11px 13px;border-radius:12px;font-size:13.5px;font-weight:{{ i.weight }};color:{{ i.ink }};background:{{ i.bg }};box-shadow:{{ i.shadow }}">{{ i.label }}</a>
+        </sc-for>
+        <a href="{{ waLink }}" target="_blank" rel="noopener" style="margin-left:8px;padding:11px 18px;border-radius:14px;font-size:13.5px;font-weight:600;color:#16233a;background:transparent;border:1px solid rgba(22,35,58,.28);transition:background .35s ease,border-color .35s ease" style-hover="background:#16233a;color:#f4f7fa;border-color:#16233a">Cotizar</a>
+      </nav>
+    </sc-if>
+
+    <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ toggle }}" aria-label="Menú" style="flex:none;width:48px;height:48px;border:0;border-radius:15px;display:grid;place-items:center;cursor:pointer;color:#16233a;background:#e9edf2;box-shadow:{{ btnShadow }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="{{ iconPath }}"></path></svg>
+      </button>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ open }}" hint-placeholder-val="{{ false }}">
+    <nav style="max-width:1280px;margin:12px auto 4px;display:grid;gap:8px;padding:14px;border-radius:22px;background:rgba(255,255,255,.72);border:1px solid rgba(22,35,58,.12)">
+      <sc-for list="{{ items }}" as="i" hint-placeholder-count="3">
+        <a href="{{ i.href }}" style="display:flex;align-items:center;justify-content:space-between;min-height:52px;padding:0 16px;border-radius:15px;font-size:15.5px;font-weight:{{ i.weight }};color:{{ i.ink }};background:{{ i.bgMobile }}">
+          {{ i.label }}
+          <svg width="16" height="16" viewBox="0 0 17 17" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="opacity:.5"><path d="M3 8.5h11M9.5 4l4.5 4.5L9.5 13"></path></svg>
+        </a>
+      </sc-for>
+      <a href="{{ waLink }}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:15px;font-size:15.5px;font-weight:600;color:#f4f7fa;background:#16233a">Cotizar por WhatsApp</a>
+    </nav>
+  </sc-if>
+</header>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:900,&quot;height&quot;:180},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;inicio&quot;,&quot;servicios&quot;,&quot;herramientas&quot;],&quot;default&quot;:&quot;inicio&quot;,&quot;tsType&quot;:&quot;'inicio' | 'servicios' | 'herramientas'&quot;},&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;573000000000&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { w: typeof innerWidth === 'number' ? innerWidth : 1200, open: false };
+
+  componentDidMount() {
+    this.measure = () => {
+      const w = document.documentElement.clientWidth || innerWidth;
+      if (w && w !== this.state.w) this.setState({ w, open: w >= 760 ? false : this.state.open });
+    };
+    addEventListener('resize', this.measure);
+    if (typeof ResizeObserver === 'function') {
+      this.ro = new ResizeObserver(() => this.measure());
+      this.ro.observe(document.documentElement);
+    }
+    requestAnimationFrame(this.measure);
+    this.wTick = setInterval(this.measure, 500);
+  }
+  componentWillUnmount() {
+    clearInterval(this.wTick);
+    removeEventListener('resize', this.measure);
+    if (this.ro) this.ro.disconnect();
+  }
+
+  renderVals() {
+    const s = this.state;
+    const narrow = s.w < 760;
+    const active = this.props.active || 'inicio';
+    const raised = '6px 6px 14px #c7ced8,-6px -6px 14px #ffffff';
+    const pressed = 'inset 4px 4px 9px #c7ced8,inset -4px -4px 9px #ffffff';
+
+    const items = [
+      { key: 'inicio', label: 'Inicio', href: 'Inicio.dc.html' },
+      { key: 'servicios', label: 'Servicios', href: 'Servicios.dc.html' },
+      { key: 'herramientas', label: 'Herramientas', href: 'Herramientas.dc.html' }
+    ].map(i => {
+      const on = i.key === active;
+      return {
+        label: i.label, href: i.href,
+        weight: on ? 600 : 500,
+        ink: on ? '#16233a' : '#44546e',
+        bg: on ? '#e9edf2' : 'transparent',
+        bgMobile: on ? 'rgba(22,35,58,.07)' : 'transparent',
+        shadow: on ? pressed : 'none'
+      };
+    });
+
+    return {
+      items,
+      wide: !narrow,
+      narrow,
+      open: narrow && s.open,
+      toggle: () => this.setState(p => ({ open: !p.open })),
+      btnShadow: s.open ? pressed : raised,
+      iconPath: s.open ? 'M6 6l12 12M18 6L6 18' : 'M4 7h16M4 12h16M4 17h16',
+      waLink: 'https://wa.me/' + ((this.props.whatsapp ?? '573000000000').replace(/[^0-9]/g, '') || '573000000000')
+    };
+  }
+}
+</script>
+</body>
+</html>
