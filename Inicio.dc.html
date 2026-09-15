@@ -165,8 +165,8 @@
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:rgba(22,35,58,.1);border-radius:22px;overflow:hidden">
         <sc-for list="{{ marcas }}" as="m" hint-placeholder-count="4">
-          <div data-rv style="height:104px;display:grid;place-items:center;background:#e9edf2;padding:20px">
-            <img src="{{ m.img }}" alt="{{ m.nombre }}" style="max-width:100%;max-height:100%;object-fit:contain;filter:grayscale(1);opacity:.75;transition:filter .35s ease,opacity .35s ease" style-hover="filter:grayscale(0);opacity:1">
+          <div data-rv style="height:104px;display:grid;place-items:center;background:#e9edf2;padding:20px;overflow:hidden">
+            <img src="{{ m.img }}" alt="{{ m.nombre }}" style="display:block;width:auto;height:64px;max-width:100%;object-fit:contain;filter:grayscale(1);opacity:.75;transition:filter .35s ease,opacity .35s ease" style-hover="filter:grayscale(0);opacity:1">
           </div>
         </sc-for>
       </div>
